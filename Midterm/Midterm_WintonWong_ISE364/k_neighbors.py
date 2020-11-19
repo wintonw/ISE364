@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 
+
+def penaltyScore(cm):
+    return 50*cm[0][1] + 10*cm[1][0]
+
+
 df = pd.read_csv(
     'https://github.com/wintonw/ISE364/raw/master/Midterm/project_data.csv')
 dfObs = pd.read_csv(
@@ -45,5 +50,9 @@ plt.show()
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_train, y_train)
 pred = knn.predict(X_Test)
-print(confusion_matrix(y_test, pred))
+
+cm = confusion_matrix(y_test, pred)
+print(cm)
 print(classification_report(y_test, pred))
+
+print(penaltyScore(cm))
