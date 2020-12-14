@@ -61,8 +61,7 @@ for i in list(range(1, 51)):
         y = df_ohe[11].values
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.3, random_state=12)
-        early_stop = EarlyStopping(
-            monitor='val_loss', mode='min', patience=50, verbose=1)
+
         model = Sequential()
         model.add(Dense(units=i, activation='relu'))
         model.add(Dropout(0.5))
@@ -74,11 +73,11 @@ for i in list(range(1, 51)):
         model.compile(loss='binary_crossentropy',
                       optimizer='adam', metrics=['accuracy'])
         model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
-            X_test, y_test), verbose=1, callbacks=early_stop)
+            X_test, y_test), verbose=0, )
 
         # plot
-        # model_loss = pd.DataFrame(model.history.history)
-        # model_loss.plot().figure.savefig('pca_n'+str(i)+'.png')
+        model_loss = pd.DataFrame(model.history.history)
+        model_loss.plot().figure.savefig('pca_n'+str(i)+'.png')
 
         # metrics
         predictions = model.predict_classes(X_test)
@@ -91,5 +90,5 @@ for i in list(range(1, 51)):
         print("error at n = " + str(i))
 
 results_df = pd.DataFrame(results, columns=['n', 'accuracy_score', 'time'])
-results_df.to_csv('results_2.csv', index=False)
+results_df.to_csv('results_1000_2.csv', index=False)
 # n, accuracy_score, time
