@@ -43,7 +43,8 @@ for index, i in enumerate(columns):
 
 
 results = []
-for i in list(range(1, 51)):
+# stopped at 24
+for i in list(range(25, 51)):
     try:
         print('doing n =', i)
         start_time = time.time()
