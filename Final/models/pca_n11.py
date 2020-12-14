@@ -59,6 +59,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 early_stop = EarlyStopping(
     monitor='val_loss', mode='min', patience=50, verbose=1)
 model = Sequential()
+model.add(Dense(units=11, activation='relu'))
+model.add(Dropout(0.5))
 model.add(Dense(units=50, activation='relu'))
 model.add(Dropout(0.5))
 

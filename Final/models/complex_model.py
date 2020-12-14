@@ -9,9 +9,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from sklearn.decomposition import PCA
 import time
-from sklearn.preprocessing import StandardScaler
 start_time = time.time()
 
 # read the data
@@ -41,40 +39,48 @@ for index, i in enumerate(columns):
         df_ohe = pd.concat([df_ohe, feature], axis=1)
         df_ohe.drop(index, axis=1, inplace=True)
 
-# pca
-# scale without col 11, the target col
-scaler = StandardScaler()
-scaler.fit(df_ohe.drop([11], axis=1))
-scaled_data = scaler.transform(df_ohe.drop([11], axis=1))
-pca = PCA(n_components=2)
-pca.fit(scaled_data)
-x_pca = pca.transform(scaled_data)
-
-
-# split data
-X = x_pca
+# set up X, y
+X = df_ohe.drop(11, axis=1).values
 y = df_ohe[11].values
+# split the data
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=12)
+
+# scale the data
+scaler = MinMaxScaler()
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+
+# model set up
 early_stop = EarlyStopping(
     monitor='val_loss', mode='min', patience=50, verbose=1)
-model = Sequential()
-model.add(Dense(units=2, activation='relu'))
-model.add(Dropout(0.5))
 
+
+model = Sequential()
 model.add(Dense(units=50, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(units=25, activation='relu'))
+
+model.add(Dense(units=250, activation='relu'))
 model.add(Dropout(0.5))
+
+model.add(Dense(units=2, activation='relu'))
+
+model.add(Dense(units=100, activation='relu'))
+model.add(Dropout(0.5))
+
+
 model.add(Dense(units=1, activation='sigmoid'))
 # loss for binary
 model.compile(loss='binary_crossentropy', optimizer='adam')
+
+# fit
 model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
     X_test, y_test), verbose=1, callbacks=early_stop)
 
 # plot
 model_loss = pd.DataFrame(model.history.history)
-model_loss.plot().figure.savefig('pca_loss_n2.png')
+model_loss.plot().figure.savefig('complex_model_loss.png')
 
 
 # metrics

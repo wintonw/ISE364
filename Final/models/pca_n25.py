@@ -46,7 +46,7 @@ for index, i in enumerate(columns):
 scaler = StandardScaler()
 scaler.fit(df_ohe.drop([11], axis=1))
 scaled_data = scaler.transform(df_ohe.drop([11], axis=1))
-pca = PCA(n_components=2)
+pca = PCA(n_components=25)
 pca.fit(scaled_data)
 x_pca = pca.transform(scaled_data)
 
@@ -59,7 +59,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 early_stop = EarlyStopping(
     monitor='val_loss', mode='min', patience=50, verbose=1)
 model = Sequential()
-model.add(Dense(units=2, activation='relu'))
+model.add(Dense(units=25, activation='relu'))
 model.add(Dropout(0.5))
 
 model.add(Dense(units=50, activation='relu'))
@@ -74,7 +74,7 @@ model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
 
 # plot
 model_loss = pd.DataFrame(model.history.history)
-model_loss.plot().figure.savefig('pca_loss_n2.png')
+model_loss.plot().figure.savefig('pca_loss_n25.png')
 
 
 # metrics
@@ -83,4 +83,4 @@ print(confusion_matrix(y_test, predictions))
 print(classification_report(y_test, predictions))
 print("accuracy_score", accuracy_score(y_test, predictions))
 
-print("\n This took", time.time() - start_time, "seconds to run")
+print("\nThis took", time.time() - start_time, "seconds to run")
