@@ -54,29 +54,24 @@ X_test = scaler.transform(X_test)
 
 # model set up
 early_stop = EarlyStopping(
-    monitor='val_loss', mode='min', patience=50, verbose=1)
+    monitor='accuracy', mode='max', patience=50, verbose=1)
 
 
 model = Sequential()
 model.add(Dense(units=50, activation='relu'))
 model.add(Dropout(0.5))
 
-model.add(Dense(units=250, activation='relu'))
+model.add(Dense(units=11, activation='relu'))
 model.add(Dropout(0.5))
-
-model.add(Dense(units=2, activation='relu'))
-
-model.add(Dense(units=100, activation='relu'))
-model.add(Dropout(0.5))
-
 
 model.add(Dense(units=1, activation='sigmoid'))
 # loss for binary
-model.compile(loss='binary_crossentropy', optimizer='adam')
+model.compile(loss='binary_crossentropy',
+              optimizer='adam', metrics=['accuracy'],)
 
 # fit
 model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
-    X_test, y_test), verbose=1, callbacks=early_stop)
+    X_test, y_test), verbose=0, callbacks=early_stop)
 
 # plot
 model_loss = pd.DataFrame(model.history.history)

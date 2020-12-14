@@ -65,7 +65,8 @@ model.add(Dense(units=25, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(units=1, activation='sigmoid'))
 # loss for binary
-model.compile(loss='binary_crossentropy', optimizer='adam')
+model.compile(loss='binary_crossentropy',
+              optimizer='adam', metrics=['accuracy'],)
 
 # fit
 model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
