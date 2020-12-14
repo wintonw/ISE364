@@ -61,6 +61,9 @@ model = Sequential()
 model.add(Dense(units=50, activation='relu'))
 model.add(Dropout(0.5))
 
+model.add(Dense(units=25, activation='relu'))
+model.add(Dropout(0.5))
+
 model.add(Dense(units=11, activation='relu'))
 model.add(Dropout(0.5))
 
