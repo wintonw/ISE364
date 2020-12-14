@@ -16,11 +16,6 @@ start_time = time.time()
 df = pd.read_csv('/home/ubuntu/ISE364/Final/data.csv', usecols=[
                  *range(0, 12)], names=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
-# each unique values get a col
-ohe = OneHotEncoder()
-feature_arr = ohe.fit_transform(df[[1]]).toarray()
-feature_label = [str(1) + "_" + str(i) for i in range(feature_arr.shape[1])]
-feature = pd.DataFrame(feature_arr, columns=feature_label)
 
 # cols
 columns = [*range(0, 12)]
@@ -74,7 +69,7 @@ model.fit(x=X_train, y=y_train, epochs=1000, validation_data=(
 
 # plot
 model_loss = pd.DataFrame(model.history.history)
-model_loss.plot().figure.savefig('base_loss.png')
+# model_loss.plot().figure.savefig('base_loss.png')
 
 
 # metrics
